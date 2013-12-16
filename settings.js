@@ -3,20 +3,11 @@ module.exports = function(app, configurations, express) {
   var clientSessions = require('client-sessions');
   var nconf = require('nconf');
   var maxAge = 24 * 60 * 60 * 1000 * 28;
-  var nativeClients = require('./clients.json');
   var csrf = express.csrf();
 
   nconf.argv().env().file({ file: 'local.json' });
 
   // Configuration
-
-  var clientBypassCSRF = function (req, res, next) {
-    if (req.body.apiKey && nativeClients.indexOf(req.body.apiKey) > -1) {
-      next();
-    } else {
-      csrf(req, res, next);
-    }
-  };
 
   app.configure(function () {
     app.set('views', __dirname + '/views');
@@ -38,22 +29,15 @@ module.exports = function(app, configurations, express) {
         maxAge: maxAge
       }
     }));
-    app.use(clientBypassCSRF);
+    app.use(csrf);
     app.use(function (req, res, next) {
       res.locals.session = req.session;
-      if (!req.body.apiKey) {
-        res.locals.csrf = req.csrfToken();
-      } else {
-        res.locals.csrf = false;
-      }
+      res.locals.csrf = req.csrfToken();
       if (!process.env.NODE_ENV) {
         res.locals.debug = true;
       } else {
         res.locals.debug = false;
       }
-      res.locals.analytics = nconf.get('analytics');
-      res.locals.appId = nconf.get('appId');
-      res.locals.analyticsHost = nconf.get('analyticsHost');
       next();
     });
     app.enable('trust proxy');

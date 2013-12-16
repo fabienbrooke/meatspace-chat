@@ -49,10 +49,6 @@ module.exports = function (app, nconf, io) {
     res.render('info');
   });
 
-  app.get('/art', function (req, res) {
-    res.render('art');
-  });
-
   app.get('/', function (req, res) {
     var currDate = Date.now();
     logger.put('landing-page!' + currDate, {
@@ -60,12 +56,6 @@ module.exports = function (app, nconf, io) {
       created: currDate
     });
     res.render('index');
-  });
-
-  // NOTE: This is now a deprecated API method -- All chats go out through web sockets
-  app.get('/get/chats', function (req, res) {
-    res.status(410);
-    res.json({ error: 'This method is now deprecated. All chat messages, including initial ones, are now emitted through web socket messages.' });
   });
 
   app.get('/ip', function (req, res) {
@@ -116,11 +106,11 @@ module.exports = function (app, nconf, io) {
         });
       } else {
         res.status(403);
-        res.json({ error: 'invalid fingerprint' });
+        res.json({ error: 'Invalid fingerprint.' });
       }
     } else {
       res.status(400);
-      res.json({ error: 'you need webrtc' });
+      res.json({ error: 'A picture must be supplied. Make sure you are using a browser supporting WebRTC.' });
     }
   });
 
@@ -135,25 +125,5 @@ module.exports = function (app, nconf, io) {
       }
     });
 
-    socket.on('message', function (data) {
-      if (nativeClients.indexOf(data.apiKey) > -1) {
-        var ip = '0.0.0.0';
-
-        addChat(data.message, data.picture, data.fingerprint, data.fingerprint, ip, function (err) {
-          if (err) {
-            console.log('error posting ', err.toString());
-          } else {
-            var currDate = Date.now();
-            logger.put('api!' + currDate, {
-              ip: ip,
-              fingerprint: data.fingerprint,
-              created: currDate
-            });
-          }
-        });
-      } else {
-        console.log('Invalid apiKey');
-      }
-    });
   });
 };
