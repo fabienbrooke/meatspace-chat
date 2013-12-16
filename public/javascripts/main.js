@@ -14,7 +14,6 @@ define(['jquery', 'transform', './base/gumhelper', './base/videoShooter', 'finge
   var charCounter = $('#counter');
   var userId = $('#userid');
   var menu = $('#menu-toggle .menu');
-  var artwork = localStorage.getItem('artwork') || false;
   var fp = $('#fp');
   var svg = $(null);
   var isPosting = false;
@@ -29,8 +28,8 @@ define(['jquery', 'transform', './base/gumhelper', './base/videoShooter', 'finge
     window.liveDebug = true;
   }
 
-  var CHAT_LIMIT = 25;
-  var CHAR_LIMIT = 250;
+  var CHAT_LIMIT = 50;
+  var CHAR_LIMIT = 500;
 
   var isMuted = function (fingerprint) {
     return mutedArr.indexOf(fingerprint) !== -1;
@@ -168,7 +167,7 @@ define(['jquery', 'transform', './base/gumhelper', './base/videoShooter', 'finge
   });
 
   if (navigator.getMedia) {
-    svg = $('<svg class="progress" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 128 64" preserveAspectRatio="xMidYMid" hidden><path d="M0,0 " id="arc" fill="none" stroke="rgba(226,38,97,0.8)" /></svg>');
+    svg = $('<svg class="progress" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 128 64" preserveAspectRatio="xMidYMid" hidden><path d="M0,0 " id="arc" fill="none" stroke="rgba(255,255,255,0.25)" /></svg>');
 
     footer.prepend(svg);
 
@@ -203,28 +202,6 @@ define(['jquery', 'transform', './base/gumhelper', './base/videoShooter', 'finge
     }
   });
 
-  var checkArtStatus = function () {
-    if (artwork) {
-      body.addClass('art');
-    } else {
-      body.removeClass('art');
-    }
-  };
-
-  checkArtStatus();
-
-  menu.find('#artwork').click(function () {
-    if (artwork) {
-      localStorage.removeItem('artwork');
-      artwork = false;
-    } else {
-      localStorage.setItem('artwork', true);
-      artwork = true;
-    }
-
-    checkArtStatus();
-  });
-
   menu.parent().click(function () {
     menu.toggle();
   });
@@ -249,7 +226,7 @@ define(['jquery', 'transform', './base/gumhelper', './base/videoShooter', 'finge
 
     if (!isPosting) {
       if (!canSend) {
-        alert('please wait a wee bit...');
+        alert('Please wait...');
         addChat.prop('readonly', false);
       }
 
@@ -260,7 +237,7 @@ define(['jquery', 'transform', './base/gumhelper', './base/videoShooter', 'finge
 
         setTimeout(function () {
           canSend = true;
-        }, 5000);
+        }, 2500);
 
         progressCircleTo(0);
 

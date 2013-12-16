@@ -245,8 +245,6 @@ a.medium {
     display: inline-block;
     height: 35px;
     width: 35px;
-    background: url('../images/meatspace.svg') center no-repeat;
-    background-size: auto 100%;
     margin: 5px 14px;
     -webkit-transition: -webkit-transform .5s;
     transition: transform .5s;
@@ -290,10 +288,6 @@ h1 {
     padding-top: 10px;
     padding-right: 10px;
     float:right;
-}
-
-input::-webkit-input-placeholder {
-    color: #fff;
 }
 
 .input:focus { color: #fff; }

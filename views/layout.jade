@@ -1,7 +1,7 @@
 !!! 5
 html
   head
-    title Meatspace chat: your 2 seconds of fame.
+    title Meatspace Chat - Two Seconds of Fame
     meta(content='width=device-width, height=device-height, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0', name='viewport')
     meta(content='yes', name='apple-mobile-web-app-capable')
     meta(content='chrome=1', http-equiv='X-UA-Compatible')
@@ -18,13 +18,7 @@ html
   body(data-authenticated='#{!!session.email}')
     #wrapper
       .header
-        a#logo(href='/info', target='_blank', title='Info!') Info!
-        #menu-toggle ≡
-          ul.menu
-            li
-              a#unmute(href='javascript:;') Unmute
-            li
-              a#artwork(href='javascript:;') Toggle Artwork
+        img#logo(src='/images/meatspace.svg', alt='Meatspace') Info!
 
       .chats
         ul
