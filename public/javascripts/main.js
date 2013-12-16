@@ -1,5 +1,5 @@
-define(['jquery', 'transform', './base/gumhelper', './base/videoShooter', 'fingerprint', 'md5', 'moment', 'waypoints'],
-  function ($, transform, gumHelper, VideoShooter, Fingerprint, md5, moment) {
+define(['jquery', 'transform', './base/gumhelper', './base/videoShooter', 'fingerprint', 'md5', 'waypoints'],
+  function ($, transform, gumHelper, VideoShooter, Fingerprint, md5) {
   'use strict';
 
   var html = $('html');
@@ -16,9 +16,13 @@ define(['jquery', 'transform', './base/gumhelper', './base/videoShooter', 'finge
   var menu = $('#menu-toggle .menu');
   var fp = $('#fp');
   var svg = $(null);
+  var chatData = $('.chat-data');
+
   var isPosting = false;
   var canSend = true;
+
   var fingerprint = new Fingerprint({ canvas: true }).get();
+
   var mutedArr = JSON.parse(localStorage.getItem('muted')) || [];
   var socket = io.connect(location.protocol + '//' + location.hostname +
     (location.port ? ':' + location.port : ''));
@@ -79,7 +83,7 @@ define(['jquery', 'transform', './base/gumhelper', './base/videoShooter', 'finge
           li.dataset.fingerprint = renderFP;
           li.appendChild(img);
 
-          // This is likely your own fingerprint so you don't mute yourself. Unless you're weird.
+          // Avoid muting yourself
           if (userId.val() !== renderFP) {
             var btn = document.createElement('button');
             btn.textContent = 'mute';
@@ -92,10 +96,16 @@ define(['jquery', 'transform', './base/gumhelper', './base/videoShooter', 'finge
           message.innerHTML = transform(message.innerHTML);
           li.appendChild(message);
 
-          var createdDate = moment(new Date(c.chat.value.created));
+          var createdDate = new Date(c.chat.value.created);
+          var displayDate = '';
+          if (typeof createdDate.toLocaleTimeString === 'function') {
+            displayDate = createdDate.toLocaleTimeString();
+          } else {
+            displayDate = createdDate.getHours() + ':' + createdDate.getMinutes();
+          }
           var timestamp = document.createElement('time');
           timestamp.setAttribute('datetime', createdDate.toISOString());
-          timestamp.textContent = createdDate.format('LT');
+          timestamp.textContent = displayDate;
           timestamp.className = 'timestamp';
           li.appendChild(timestamp);
 
@@ -206,7 +216,7 @@ define(['jquery', 'transform', './base/gumhelper', './base/videoShooter', 'finge
     menu.toggle();
   });
 
-  body.on('click', '#unmute', function (ev) {
+  body.on('click', '#unmute', function () {
     debug('clearing mutes');
     localStorage.clear();
   });
@@ -216,7 +226,7 @@ define(['jquery', 'transform', './base/gumhelper', './base/videoShooter', 'finge
       ev.preventDefault();
       addChatForm.submit();
     }
-  }).on('keyup', function (ev) {
+  }).on('keyup', function () {
     charCounter.text(CHAR_LIMIT - addChat.val().length);
   }).on('submit', function (ev) {
     ev.preventDefault();
@@ -278,5 +288,12 @@ define(['jquery', 'transform', './base/gumhelper', './base/videoShooter', 'finge
   function hasModifiersPressed(event) {
     // modifiers exclude shift since it's often used in normal typing
     return (event.altKey || event.ctrlKey || event.metaKey);
+  }
+
+  if (chatData.length > 0) {
+    var data = JSON.parse(chatData[0].innerHTML);
+    data.forEach(function(message) {
+      renderChat({ chat: message });
+    });
   }
 });

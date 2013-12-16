@@ -13,7 +13,7 @@ module.exports = function (app, nconf, io) {
 
   var publico = new Publico('none', {
     db: './db',
-    limit: 20
+    limit: 50
   });
 
   var getSortedChats = function (done){
@@ -45,17 +45,20 @@ module.exports = function (app, nconf, io) {
     socket.emit('message', { chat: chat });
   };
 
-  app.get('/info', function (req, res) {
-    res.render('info');
-  });
-
   app.get('/', function (req, res) {
-    var currDate = Date.now();
-    logger.put('landing-page!' + currDate, {
-      ip: req.ip,
-      created: currDate
+    // Fire out an initial burst of images to the connected client, assuming there are any available
+    getSortedChats(function (err, results) {
+      var currDate = Date.now();
+      logger.put('landing-page!' + currDate, {
+        ip: req.ip,
+        created: currDate
+      });
+      if (err) {
+        res.render('index');
+      } else {
+        res.render('index', { chats: results.chats });
+      }
     });
-    res.render('index');
   });
 
   app.get('/ip', function (req, res) {
@@ -112,18 +115,5 @@ module.exports = function (app, nconf, io) {
       res.status(400);
       res.json({ error: 'A picture must be supplied. Make sure you are using a browser supporting WebRTC.' });
     }
-  });
-
-  io.sockets.on('connection', function (socket) {
-
-    // Fire out an initial burst of images to the connected client, assuming there are any available
-    getSortedChats(function (err, results) {
-      if(results.chats && results.chats.length > 0) {
-        results.chats.forEach(function (chat) {
-          emitChat(socket, chat);
-        });
-      }
-    });
-
   });
 };
