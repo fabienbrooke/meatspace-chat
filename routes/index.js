@@ -57,7 +57,7 @@ module.exports = function (app, nconf, io) {
 
   var addChat = function (message, picture, fingerprint, userId, ip, next) {
     publico.addChat(message.slice(0, 250), {
-      ttl: 600000,
+      ttl: 1800000,
       media: picture,
       fingerprint: userId
     }, function (err, c) {
