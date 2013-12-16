@@ -106,7 +106,7 @@ body > img {
     cursor: pointer;
     font-size: 2rem;
     font-weight: 300;
-    color: #e22661;
+    color: #042389;
     float: right;
     margin-top: 5px;
     margin-right: 16px;
@@ -120,12 +120,12 @@ body > img {
     font-size: 1.2rem;
     padding: 8px 18px 9px;
     text-decoration: none;
-    background-color: #f181ad;
+    background-color: #0432bc;
     border-bottom: 1px solid rgba(255, 255, 255, .25);
 }
 
 #menu-toggle li a:hover {
-    background-color: #e22661;;
+    background-color: #042389;;
     color: #eee;
 }
 
@@ -134,7 +134,8 @@ body > img {
 }
 
 .menu {
-    background-color: #e22661;
+    display: none;
+    background-color: #042389;
     border-bottom: 1px solide #111;
     border-left: 1px solide #111;
     position: absolute;
@@ -157,7 +158,7 @@ body > img {
 }
 
 .infobox a {
-    color: #f65694;
+    color: #042389;
     text-decoration: none;
     text-shadow: #fff 1px 1px 0;
 }
@@ -228,7 +229,7 @@ a.medium {
 
 .header {
     background-color: #fff;
-    border-bottom: 1px solid #f181ad;
+    border-bottom: 1px solid #0432bc;
     position: fixed;
     right: 0;
     text-align: center;
@@ -329,7 +330,7 @@ input::-webkit-input-placeholder {
     position: absolute;
     width: 100%;
     height: 1px;
-    background: #f181ad;
+    background: #0432bc;
     content: "";
     bottom: 0;
     left: 171px;
@@ -365,7 +366,7 @@ input::-webkit-input-placeholder {
 
 .chats li .mute {
     font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
-    background-color: #f181ad;
+    background-color: #0432bc;
     border: 0;
     color: #fff;
     display: none;
@@ -385,7 +386,7 @@ input::-webkit-input-placeholder {
 }
 
 .chats li .mute:hover {
-    background-color: #e22661;
+    background-color: #042389;
     color: #eee;
 }
 
@@ -462,7 +463,7 @@ ul li.on {
     width: 100%;
     height: 51px;
     padding: 0;
-    background-color: #f181ad;
+    background-color: #042389;
 }
 
 #footer video {
@@ -552,7 +553,7 @@ ul li.on {
         margin-bottom: 0;
         padding: 5px 5px 5px 7px;
         font-size: .7rem;
-        color: #f181ad;
+        color: #042389;
         background: none;
     }
 

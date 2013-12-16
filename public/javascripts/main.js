@@ -12,7 +12,6 @@ define(['jquery', 'transform', './base/gumhelper', './base/videoShooter', 'finge
   var chatsContainer = $('.chats');
   var footer = $('#footer');
   var charCounter = $('#counter');
-  var muteBtn = $('.mute');
   var userId = $('#userid');
   var menu = $('#menu-toggle .menu');
   var artwork = localStorage.getItem('artwork') || false;
@@ -25,6 +24,7 @@ define(['jquery', 'transform', './base/gumhelper', './base/videoShooter', 'finge
   var socket = io.connect(location.protocol + '//' + location.hostname +
     (location.port ? ':' + location.port : ''));
   var videoShooter;
+
   if (/liveDebug/.test(window.location.search)) {
     window.liveDebug = true;
   }
@@ -201,12 +201,6 @@ define(['jquery', 'transform', './base/gumhelper', './base/videoShooter', 'finge
       localStorage.setItem('muted', JSON.stringify(mutedArr));
       self.text('muted!');
     }
-  });
-
-  menu.toggle(function () {
-    $(this).addClass('on');
-  }, function () {
-    $(this).removeClass('on');
   });
 
   var checkArtStatus = function () {
