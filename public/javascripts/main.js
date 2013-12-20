@@ -1,5 +1,5 @@
-define(['jquery', 'transform', './base/gumhelper', './base/videoShooter', 'fingerprint', 'md5', 'waypoints'],
-  function ($, transform, gumHelper, VideoShooter, Fingerprint, md5) {
+define(['jquery', 'transform', './base/gumhelper', './base/videoShooter', 'fingerprint', 'md5', 'favico', 'waypoints'],
+  function ($, transform, gumHelper, VideoShooter, Fingerprint, md5, Favico) {
   'use strict';
 
   var html = $('html');
@@ -16,8 +16,6 @@ define(['jquery', 'transform', './base/gumhelper', './base/videoShooter', 'finge
   var menu = $('#menu-toggle .menu');
   var fp = $('#fp');
   var svg = $(null);
-  var chatData = $('.chat-data');
-
   var isPosting = false;
   var canSend = true;
 
@@ -34,6 +32,42 @@ define(['jquery', 'transform', './base/gumhelper', './base/videoShooter', 'finge
 
   var CHAT_LIMIT = 50;
   var CHAR_LIMIT = 500;
+
+  // set up tab notifications for unread messages
+  var favicon = new Favico({
+    animation: 'none',
+    position: 'up'
+  });
+
+  var pageHidden = 'hidden';
+  var pageVisibilityChange = 'visibilitychange';
+
+  if (typeof document.hidden === 'undefined') {
+    ['webkit', 'moz', 'ms'].some(function (prefix) {
+      var prop = prefix + 'Hidden';
+      if (typeof document[prop] !== 'undefined') {
+        pageHidden = prop;
+        pageVisibilityChange = prefix + 'visibilitychange';
+        return true;
+      }
+    });
+  }
+
+  var unreadMessages = 0;
+
+  var handleVisibilityChange = function () {
+    if (!document[pageHidden]) {
+      unreadMessages = 0;
+      favicon.badge(0);
+    }
+  };
+
+  var updateNotificationCount = function () {
+    if (document[pageHidden]) {
+      unreadMessages += 1;
+      favicon.badge(unreadMessages);
+    }
+  };
 
   var isMuted = function (fingerprint) {
     return mutedArr.indexOf(fingerprint) !== -1;
@@ -72,7 +106,7 @@ define(['jquery', 'transform', './base/gumhelper', './base/videoShooter', 'finge
 
     if (!isMuted(renderFP)) {
       var img = new Image();
-      img.onload = function () {
+      var onComplete = function () {
         // Don't want duplicates and don't want muted messages
         if (body.find('li[data-key="' + c.chat.key + '"]').length === 0 &&
             !isMuted(renderFP)) {
@@ -130,6 +164,9 @@ define(['jquery', 'transform', './base/gumhelper', './base/videoShooter', 'finge
           }
         }
       };
+
+      img.onload = onComplete;
+      img.onerror = onComplete;
       img.src = c.chat.value.media;
     }
   };
@@ -197,6 +234,7 @@ define(['jquery', 'transform', './base/gumhelper', './base/videoShooter', 'finge
 
   socket.on('message', function (data) {
     debug("Incoming chat key='%s'", data.chat.key);
+    updateNotificationCount();
     renderChat(data);
   });
 
@@ -295,5 +333,8 @@ define(['jquery', 'transform', './base/gumhelper', './base/videoShooter', 'finge
     data.forEach(function(message) {
       renderChat({ chat: message });
     });
+    chatData.remove();
   }
+
+  $(document).on(pageVisibilityChange, handleVisibilityChange);
 });

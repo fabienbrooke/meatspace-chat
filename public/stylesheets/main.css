@@ -54,45 +54,6 @@ body {
     background-color: #eee;
 }
 
-body.art {
-    background: url('/images/art.gif') no-repeat 50% 50%;
-    background-attachment: fixed;
-    background-size: cover;
-}
-
-body.info {
-    background-color: #eee;
-    background-image: none;
-    padding-top: 50px;
-}
-
-.info .item {
-    background-color: #fff;
-    box-shadow: #ccc 1px 1px 4px;
-    float: left;
-    height: 310px;
-    margin: 5px;
-    padding: 10px;
-    position: relative;
-    width: 275px;
-}
-
-.artist-wrapper {
-    font-size: 1.2rem;
-    padding: 20px;
-}
-
-.artist-wrapper a {
-    color: #0432bc;
-    display: inline-block;
-    text-decoration: none;
-}
-
-.artist-wrapper a.artist {
-    font-size: 1.8rem;
-    margin-right: 15px;
-}
-
 html, body {
     height: 100%;
     position: relative;
@@ -134,7 +95,6 @@ body > img {
 }
 
 .menu {
-    display: none;
     background-color: #042389;
     border-bottom: 1px solide #111;
     border-left: 1px solide #111;
