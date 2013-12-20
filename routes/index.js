@@ -3,7 +3,6 @@
 module.exports = function (app, nconf, io) {
   var crypto = require('crypto');
   var Publico = require('meatspace-publico');
-  var nativeClients = require('../clients.json');
   var level = require('level');
 
   var logger = level(nconf.get('logger'), {
