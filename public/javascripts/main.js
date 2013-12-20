@@ -16,6 +16,7 @@ define(['jquery', 'transform', './base/gumhelper', './base/videoShooter', 'finge
   var menu = $('#menu-toggle .menu');
   var fp = $('#fp');
   var svg = $(null);
+  var chatData = $('#chat-data');
   var isPosting = false;
   var canSend = true;
 
